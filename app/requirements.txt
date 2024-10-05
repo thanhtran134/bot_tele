@@ -1,0 +1,11 @@
+langchain
+tiktoken
+openai
+langsmith
+python-dotenv
+weaviate-client
+langserve
+sse_starlette
+pydantic
+python-telegram-bot
+
