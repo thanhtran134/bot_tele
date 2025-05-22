@@ -2,12 +2,10 @@ import os
 import replicate
 from telegram import Update
 from telegram.ext import Application, CommandHandler, MessageHandler, filters, ContextTypes
-from dotenv import load_dotenv
+# from dotenv import load_dotenv
 import aiohttp
 import json
-
-TOKEN = "Enter Token Bot"
-REPLICATE_API_TOKEN = "Enter API"
+import config
 
 async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
     await update.message.reply_text("Welcome! Send a text prompt to generate an anime-style image.")
@@ -17,7 +15,7 @@ async def generate_image(update: Update, context: ContextTypes.DEFAULT_TYPE):
     prompt = update.message.text
     await update.message.reply_text("Generating anime image, please wait...")
 
-    client = replicate.Client(api_token=REPLICATE_API_TOKEN)
+    client = replicate.Client(api_token=config.REPLICATE_API_TOKEN)
     output = client.run(
         "cjwbw/animagine-xl-3.1:6afe2e6b27dad2d6f480b59195c221884b6acc589ff4d05ff0e5fc058690fbb9",
         input={
@@ -58,7 +56,7 @@ async def list_generations(update: Update, context: ContextTypes.DEFAULT_TYPE):
                 await update.message.reply_text("Failed to retrieve generations.")
 
 def main():
-    app = Application.builder().token(TOKEN).build()
+    app = Application.builder().token(config.TOKEN).build()
     app.add_handler(CommandHandler("start", start))
     app.add_handler(CommandHandler("list", list_generations))
     app.add_handler(MessageHandler(filters.TEXT & ~filters.COMMAND, generate_image))
